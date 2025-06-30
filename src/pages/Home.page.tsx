@@ -17,15 +17,17 @@ export default function HomePage() {
     const [openEditModal, setOpenEditModal] = useState<boolean>(false);
     const [selectedProduct, setSelectedProduct] = useState<ProductInterface>();
 
+    
+    useEffect(() => {
+        setProducts(getProducts());
+    }, []);
+    console.log("🚀 ~ rows:", products)
+    
     const handleEdit = (product: ProductInterface) => {
         setSelectedProduct(product)
         setOpenEditModal(true)
     }
 
-    useEffect(() => {
-    setProducts(getProducts());
-    }, []);
-    console.log("🚀 ~ rows:", products)
 
     const columns: GridColDef[] = [
     { field: 'id', headerName: 'Id', width: 50 },
@@ -67,17 +69,17 @@ export default function HomePage() {
   return (
    <>
         <h1>Welcome</h1>
-         <div style={{ height: 300, width: '100%' }}>
+         <div style={{ height: 500, width: '100%' }}>
             <DataGrid rows={products} columns={columns} initialState={{pagination: {paginationModel: {pageSize: 10, page: 0}}}} />
         </div>
         <Button variant='contained' onClick={handleAddClickOpen}>
             Ajouter un nouveau produit
         </Button>
         <Dialog open={openAddModal} onClose={handleAddClose}>
-            <ProductsForm handleClose={handleAddClose}/>
+            <ProductsForm handleClose={handleAddClose} onSave={(newOrUpdatedProductList) => setProducts(newOrUpdatedProductList)}/>
         </Dialog>
         <Dialog open={openEditModal} onClose={handleEdit}>
-            <ProductsForm handleClose={() => setOpenEditModal(false)} isEditMode={true} editedProduct={selectedProduct}/>
+            <ProductsForm handleClose={() => setOpenEditModal(false)} isEditMode={true} editedProduct={selectedProduct} onSave={(newOrUpdatedProductList) => setProducts(newOrUpdatedProductList)}/>
         </Dialog>
         
    </>

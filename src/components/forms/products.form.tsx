@@ -6,19 +6,23 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Box from '@mui/material/Box';
 import { useFormik } from "formik";
 import * as Yup from 'yup';
-import { addProduct, editProduct } from "../../services/products.service";
+import getProducts, { addProduct, editProduct } from "../../services/products.service";
 import FloatingLabelInput from "../ui/FloatingLabelInput";
 import type ProductInterface from "../../interfaces/products.interface";
+import referenceAlreadyExists from "../../utils/checkReference";
+import { useEffect, useState } from "react";
+import Alert from "@mui/material/Alert";
 
 interface ProductsFormProps {
     handleClose: () => void;
     isEditMode?: boolean;
-    editedProduct?: ProductInterface
-}
+    editedProduct?: ProductInterface;
+    onSave: (products: ProductInterface[]) => void;}
 
 export default function ProductsForm(props : ProductsFormProps) {
 
-    const {handleClose, editedProduct, isEditMode = false} = props
+    const {handleClose, editedProduct, isEditMode = false, onSave} = props
+    const [errorMessage, setErrorMessage] = useState<string>('');
     console.log("🚀 ~ ProductsForm ~ isEditMode:", isEditMode)
 
     const ProductSchema = Yup.object().shape({
@@ -37,23 +41,35 @@ export default function ProductsForm(props : ProductsFormProps) {
             rating: editedProduct?.rating ?? 0,
         },
         onSubmit: (product) => {
+            if(referenceAlreadyExists(product.reference, getProducts())) {
+                setErrorMessage('La référence existe déjà');
+                return 
+            }
             if(isEditMode && editedProduct) {
-                const finalProduct = editProduct(editedProduct.id, product)
-                if (finalProduct) handleClose()
+                const updatedList = editProduct(editedProduct.id, product)
+                if (updatedList) {
+                    onSave(updatedList)
+                    handleClose()
+                }
             } else {
-                const newProduct = addProduct(product)
-                if (newProduct) handleClose()
+                const updatedList = addProduct(product)
+                if (updatedList) {
+                    onSave(updatedList)
+                    handleClose()
+                }
             }
         }
     });
 
-
     return (
         <>
-            <DialogTitle>Ajouter un produit</DialogTitle>
+            <DialogTitle>{isEditMode ? "Modifier un produit" : "Ajouter un produit"}</DialogTitle>
             <DialogContent sx={{ paddingBottom: 0 }}>
             <DialogContentText>
-                Veuillez entrer les informations du nouveau produit.
+                Veuillez entrer les informations du {isEditMode ? "" : "nouveau"} produit.
+                {errorMessage !== '' && (
+                    <Alert severity="error">{errorMessage}</Alert>
+                )}
             </DialogContentText>
                 <form onSubmit={formik.handleSubmit} >
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>

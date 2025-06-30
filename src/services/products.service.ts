@@ -12,19 +12,19 @@ export default function getProducts(): ProductInterface[] {
   return products;
 }
 
-export function addProduct(product : Omit<ProductInterface, "id">): ProductInterface {
+export function addProduct(product : Omit<ProductInterface, "id">): ProductInterface[] {
     console.log("🚀 ~ addProduct ~ product:", product)
     const currentProducts = getProducts();
     const productWithId : ProductInterface = {...product, id: currentProducts.length + 1}
-    localStorage.setItem('acc_products', JSON.stringify([...currentProducts, productWithId]));
-    return productWithId;
+    const updatedList = [...currentProducts, productWithId]
+    localStorage.setItem('acc_products', JSON.stringify(updatedList));
+    return updatedList;
 }
 
 export function editProduct(id: number, product : Omit<ProductInterface, "id">): ProductInterface[] {
     console.log("🚀 ~ editProduct ~ id:", id)
     console.log("🚀 ~ editProduct ~ product:", product)
-    const currentProducts = getProducts().filter((product) => product.id !== id)
-    const updatedProducts = [...currentProducts, {...product, id: id}].sort((a, b) => a.id - b.id)
+    const updatedProducts = getProducts().map(p => p.id === id ? {...product, id: id} : p);
     localStorage.setItem('acc_products', JSON.stringify(updatedProducts));
     return updatedProducts
     
