@@ -13,7 +13,6 @@ export default function getProducts(): ProductInterface[] {
 }
 
 export function addProduct(product : Omit<ProductInterface, "id">): ProductInterface[] {
-    console.log("🚀 ~ addProduct ~ product:", product)
     const currentProducts = getProducts();
     const productWithId : ProductInterface = {...product, id: currentProducts.length + 1}
     const updatedList = [...currentProducts, productWithId]
@@ -22,8 +21,6 @@ export function addProduct(product : Omit<ProductInterface, "id">): ProductInter
 }
 
 export function editProduct(id: number, product : Omit<ProductInterface, "id">): ProductInterface[] {
-    console.log("🚀 ~ editProduct ~ id:", id)
-    console.log("🚀 ~ editProduct ~ product:", product)
     const updatedProducts = getProducts().map(p => p.id === id ? {...product, id: id} : p);
     localStorage.setItem('acc_products', JSON.stringify(updatedProducts));
     return updatedProducts

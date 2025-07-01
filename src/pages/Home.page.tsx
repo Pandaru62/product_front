@@ -21,7 +21,6 @@ export default function HomePage() {
     useEffect(() => {
         setProducts(getProducts());
     }, []);
-    console.log("🚀 ~ rows:", products)
     
     const handleEdit = (product: ProductInterface) => {
         setSelectedProduct(product)
