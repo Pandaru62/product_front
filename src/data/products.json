@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "Engine Oil",
+    "reference": "EO-5W30-001",
+    "price": 29.99,
+    "rating": 4.5
+  },
+  {
+    "id": 2,
+    "name": "Car Battery",
+    "reference": "CB-12V60-002",
+    "price": 89.50,
+    "rating": 4.2
+  },
+  {
+    "id": 3,
+    "name": "Windshield Wipers Set",
+    "reference": "WW-SET-003",
+    "price": 24.75,
+    "rating": 4.0
+  },
+  {
+    "id": 4,
+    "name": "Brake Pads Front",
+    "reference": "BP-FR-004",
+    "price": 49.90,
+    "rating": 4.7
+  },
+  {
+    "id": 5,
+    "name": "LED Headlight Bulbs",
+    "reference": "LED-HL-005",
+    "price": 39.99,
+    "rating": 4.3
+  },
+  {
+    "id": 6,
+    "name": "Car Floor Mats (Set of 4)",
+    "reference": "CFM-4PC-006",
+    "price": 35.00,
+    "rating": 4.1
+  },
+  {
+    "id": 7,
+    "name": "Tire Inflator with Gauge",
+    "reference": "TI-GG-007",
+    "price": 19.95,
+    "rating": 3.8
+  },
+  {
+    "id": 8,
+    "name": "Air Filter Element",
+    "reference": "AF-ELEM-008",
+    "price": 17.49,
+    "rating": 4.4
+  },
+  {
+    "id": 9,
+    "name": "Car Wax Polish",
+    "reference": "CW-POL-009",
+    "price": 12.99,
+    "rating": 4.0
+  },
+  {
+    "id": 10,
+    "name": "Trunk Organizer",
+    "reference": "TR-ORG-010",
+    "price": 27.80,
+    "rating": 4.6
+  }
+]
