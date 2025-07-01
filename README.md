@@ -8,7 +8,7 @@ From a terminal:
 1. Clone the project in a folder
 ```bash
    git clone https://github.com/Pandaru62/product_front.git
-   cd <project-folder>
+   cd product_front
 ```
 
 2. Install packages
