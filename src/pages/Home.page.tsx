@@ -2,7 +2,7 @@ import { DataGrid, type GridRowsProp, type GridColDef } from '@mui/x-data-grid';
 import getProducts from '../services/products.service';
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import Button from '@mui/joy/Button';
 import Dialog from '@mui/material/Dialog';
 import ProductsForm from '../components/forms/products.form';
 import Rating from '@mui/material/Rating';
@@ -30,7 +30,7 @@ export default function HomePage() {
 
 
     const columns: GridColDef[] = [
-    { field: 'id', headerName: 'Id', width: 50 },
+    { field: 'id', headerName: 'Id', width: 100 },
     { field: 'name', headerName: 'Nom', width: 300 },
     { field: 'reference', headerName: 'Référence', width: 150 },
     { field: 'price', headerName: 'Prix', width: 150, valueFormatter: (value) => `${value} €` },
@@ -47,7 +47,7 @@ export default function HomePage() {
     </Box>
 
     ) },
-    { field: 'actions', headerName: 'Actions', renderCell: (params) => (
+    { field: 'actions', headerName: 'Actions', width: 150, renderCell: (params) => (
         <IconButton
         color="primary"
         onClick={() => handleEdit(params.row)}
@@ -58,22 +58,23 @@ export default function HomePage() {
 
     ];
 
-    const handleAddClickOpen = () => {
-    setOpenAddModal(true);
-  };
-
     const handleAddClose = () => {
         setOpenAddModal(false);
   };
 
   return (
    <>
-        <h1>Welcome</h1>
+        <h1>Tous les produits</h1>
          <div style={{ height: 500, width: '100%' }}>
             <DataGrid rows={products} columns={columns} initialState={{pagination: {paginationModel: {pageSize: 10, page: 0}}}} />
         </div>
-        <Button variant='contained' onClick={handleAddClickOpen}>
-            Ajouter un nouveau produit
+        <Button
+            startDecorator={<svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 50 50"><path fill="currentColor" d="M25 42c-9.4 0-17-7.6-17-17S15.6 8 25 8s17 7.6 17 17s-7.6 17-17 17m0-32c-8.3 0-15 6.7-15 15s6.7 15 15 15s15-6.7 15-15s-6.7-15-15-15"></path><path fill="currentColor" d="M16 24h18v2H16z"></path><path fill="currentColor" d="M24 16h2v18h-2z"></path></svg>}
+            sx={{ display: { xs: 'none', md: 'inline-flex', marginTop: '10px' } }}
+            color="success"
+            onClick={() => setOpenAddModal(true)}
+        >
+            Nouveau produit
         </Button>
         <Dialog open={openAddModal} onClose={handleAddClose}>
             <ProductsForm handleClose={handleAddClose} onSave={(newOrUpdatedProductList) => setProducts(newOrUpdatedProductList)}/>

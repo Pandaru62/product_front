@@ -16,6 +16,7 @@ type FloatingLabelInputProps = {
   min? : number;
   max? : number;
   step? : number;
+  endDecorator?: string;
 };
 
 export default function FloatingLabelInput({
@@ -29,12 +30,13 @@ export default function FloatingLabelInput({
   helperText,
   min,
   max,
-  step
+  step,
+  endDecorator
 }: FloatingLabelInputProps) {
 
   return (
     <FormControl error={error} sx={{ my: 1 }}>
-      <FormLabel>{label}</FormLabel>
+      <FormLabel sx={{color: 'black'}}>{label}</FormLabel>
       {type === 'number' ? (
         <Input
         name={name}
@@ -42,6 +44,7 @@ export default function FloatingLabelInput({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        startDecorator={endDecorator}
         sx={{ '--Input-minHeight': '56px', '--Input-radius': '6px' }}
         slotProps={{
           input: {

@@ -4,62 +4,18 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from '@mui/material/Box';
-import { useFormik } from "formik";
-import * as Yup from 'yup';
-import getProducts, { addProduct, editProduct } from "../../services/products.service";
 import FloatingLabelInput from "../ui/FloatingLabelInput";
-import type ProductInterface from "../../interfaces/products.interface";
-import referenceAlreadyExists from "../../utils/checkReference";
-import { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
+import Rating from "@mui/material/Rating";
+import FormLabel from "@mui/material/FormLabel";
+import { useProductForm, type ProductsFormProps } from "../../hooks/useProductForm";
 
-interface ProductsFormProps {
-    handleClose: () => void;
-    isEditMode?: boolean;
-    editedProduct?: ProductInterface;
-    onSave: (products: ProductInterface[]) => void;}
 
 export default function ProductsForm(props : ProductsFormProps) {
 
     const {handleClose, editedProduct, isEditMode = false, onSave} = props
-    const [errorMessage, setErrorMessage] = useState<string>('');
-    console.log("🚀 ~ ProductsForm ~ isEditMode:", isEditMode)
 
-    const ProductSchema = Yup.object().shape({
-        name: Yup.string().required('Requis'),
-        reference: Yup.string().required('Requis'),
-        price: Yup.number().positive('Le prix doit être positif !').required('Requis'),
-        rating: Yup.number().min(0, 'La note doit être entre 0 et 5').max(5, 'La note doit être entre 0 et 5').required('Requis'),
-    });
-
-    const formik = useFormik({
-        validationSchema: ProductSchema,
-        initialValues: {
-            name :  editedProduct?.name ?? "",
-            reference : editedProduct?.reference ?? "",
-            price : editedProduct?.price ?? 1,
-            rating: editedProduct?.rating ?? 0,
-        },
-        onSubmit: (product) => {
-            if(referenceAlreadyExists(product.reference, getProducts())) {
-                setErrorMessage('La référence existe déjà');
-                return 
-            }
-            if(isEditMode && editedProduct) {
-                const updatedList = editProduct(editedProduct.id, product)
-                if (updatedList) {
-                    onSave(updatedList)
-                    handleClose()
-                }
-            } else {
-                const updatedList = addProduct(product)
-                if (updatedList) {
-                    onSave(updatedList)
-                    handleClose()
-                }
-            }
-        }
-    });
+    const {formik, errorMessage} = useProductForm({handleClose, editedProduct, isEditMode, onSave});
 
     return (
         <>
@@ -97,6 +53,7 @@ export default function ProductsForm(props : ProductsFormProps) {
                             name="price"
                             label="Prix du produit"
                             type="number"
+                            endDecorator="€"
                             min={0}
                             step={0.01}
                             value={formik.values.price}
@@ -105,24 +62,19 @@ export default function ProductsForm(props : ProductsFormProps) {
                             error={formik.touched.price && Boolean(formik.errors.price)}
                             helperText={formik.touched.price && formik.errors.price}
                         />
-
-                        <FloatingLabelInput
-                            name="rating"
-                            label="Note du produit"
-                            type="number"
-                            min={0}
-                            max={5}
-                            step={0.5}
-                            value={formik.values.rating}
+                        
+                        <FormLabel sx={{color: 'black'}}>Note du produit</FormLabel>
+                        <Rating 
+                            name="rating" 
+                            value={formik.values.rating} 
+                            precision={0.5}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={formik.touched.rating && Boolean(formik.errors.rating)}
-                            helperText={formik.touched.rating && formik.errors.rating}
                         />
                     </Box>
                     
                     <DialogActions>
-                        <Button onClick={handleClose}>Annuler</Button>
+                        <Button onClick={handleClose} color="warning">Annuler</Button>
                         <Button type="submit">Valider</Button>
                     </DialogActions>
                 </form>
